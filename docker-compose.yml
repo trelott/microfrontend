@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  provider-api:
+    image: trelot/provider-api
+    build: 
+      context: ./provider-api
+      args:
+        buildno: 1
+    ports:
+      - "3000:3000"
+    networks:
+      - app-net
+
+  products-api:
+    image: trelot/products-api
+    build: 
+      context: ./products-api
+      args:
+        buildno: 1
+    ports:
+      - "3001:3001"
+    networks:
+      - app-net
+
+  vue-app:
+    image: trelot/vue-app
+    build:
+      context: ./vue-app
+      args:
+        buildno: 2
+    ports:
+      - "8080:8080"
+    networks:
+      - app-net
+    depends_on:
+      - provider-api
+      - products-api
+
+networks:
+  app-net:
